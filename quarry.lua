@@ -1,1 +1,3 @@
-buildAPI.digQuarry(4, 6, 10)
+os.loadAPI("digAPI.lua")
+
+digAPI.digQuarry(blocks, rows, layers)
