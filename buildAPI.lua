@@ -91,16 +91,12 @@ function digLayerStart()
 end
 
 function digQuarry(blocks,rows,layers)
+    digCheckFirst(layers)
     local ab = 1
     while ab <= layers do
         fuelUp()
-        digLayerStart()
         digLayer(blocks,rows)
-        turtle.back()
-        turtle.turnLeft()
-        digCompleteA(rows - 1)
-        turtle.turnRight()
-        turtle.down()
+        endlayer(rows)
         ab = ab + 1
     end
     digCompleteC(layers)
@@ -109,14 +105,15 @@ end
 
 function fuelUp()
     turtle.select(1)
-    if turtle.getFuelLevel() < 10 then
+    if turtle.getFuelLevel() < 100 then
         turtle.refuel()
     end
 end
 
-function clearInventory(i)
-    for i = 1,16 do
-        turtle.select(i)
+function clearInventory(slotA,slotB)
+    for i = slotA,slotB do
+        turtle.turnLeft()
+        turtle.select(slotA,slotB)
         turtle.drop()
     end
 end
@@ -130,10 +127,30 @@ function digLayer(blocks,rows)
         startDig()
         m = m + 1
     end
-    turtle.turnLeft()
+end
+
+function endLayer(rows)
+    turtle.turnRight()
     turtle.dig()
     turtle.select(16)
     turtle.place()
+    turtle.turnLeft()
+    digCompleteA(rows)
+    turtle.turnRight()
+    turtle.down()
 end
 
-
+function digCheckFirst(layers)
+    if turtle.getItemCount(1) <= 15 then
+        print("I need more fuel!")
+        os.sleep(15)
+    else
+        print("Plenty of fuel!")
+    end
+    if turtle.getItemCount(16) <= layers then
+        print("I need ".. layers .." ladders!")
+        os.sleep(15)
+    else
+        print("I have enough ladders!")
+    end
+end
