@@ -1,4 +1,4 @@
---Digging commands. Everywhere you see (num) 
+--Digging commands. Everywhere you see (<value>) 
 --you have to put a custom number in the line
 --in order for it to execute. You can also group them.
 --Otherwise, I don't think it'll do anything.
@@ -96,7 +96,7 @@ function digQuarry(blocks,rows,layers)
     while ab <= layers do
         fuelUp()
         digLayer(blocks,rows)
-        endlayer(rows)
+        endLayer(rows)
         ab = ab + 1
     end
     digCompleteC(layers)
@@ -112,11 +112,12 @@ end
 
 function clearInventory(slotA,slotB)
     turtle.turnLeft()
-	for i = slotA,slotB do
+    for i = slotA,slotB do
         turtle.select(i)
         turtle.drop()
     end
-	print("Inventory cleared!")
+    turtle.turnRight()
+    print("Inventory cleared!")
 end
 
 function digLayer(blocks,rows)
@@ -131,6 +132,9 @@ function digLayer(blocks,rows)
 end
 
 function endLayer(rows)
+--Ends each layer by placing
+--a ladder and reorienting
+--for the next layer.
     turtle.turnRight()
     turtle.dig()
     turtle.select(16)
@@ -141,7 +145,20 @@ function endLayer(rows)
     turtle.down()
 end
 
+function endLayerNoClimb(rows)
+--Reorients to the next layer
+--without placing a ladder.
+    digCompleteA(rows)
+    turtle.turnRight()
+    turtle.down()
+end
+
 function digCheckFirst(layers)
+--Tells you if you need coal and
+--ladders. Will only pause turtle
+--15 seconds if it doesn't have enough.
+--Then it will resume.
+--Assumes coal is in 1 and ladders in 16.
     if turtle.getItemCount(1) <= 15 then
         print("I need more fuel!")
         os.sleep(15)
