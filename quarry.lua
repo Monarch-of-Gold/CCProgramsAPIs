@@ -1,0 +1,1 @@
+buildAPI.digQuarry(4, 6, 10)
