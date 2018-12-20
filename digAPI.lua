@@ -111,6 +111,10 @@ function fuelUp()
 end
 
 function clearInventory(slotA,slotB)
+--Assumes you placed a chest or other
+--inventory to the turtle's left before
+--starting, and attempts to dump items in.
+--If no inventory, it'll dump on the ground.
     turtle.turnLeft()
     for i = slotA,slotB do
         turtle.select(i)
